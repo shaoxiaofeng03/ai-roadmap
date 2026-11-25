@@ -59,7 +59,7 @@ def ask_model(message = None):
         {"role": "system", "content": "你是一个简洁的助手。"}
     ]
 
-    messages.append()
+    messages.append({"role": "", "content": "你是一个简洁的助手。"})
     resp = client.chat.completions.create(
         model="deepseek-chat",
         messages = messages,
