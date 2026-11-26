@@ -7,18 +7,18 @@
 
 | 路径 | 是什么 | 什么时候用 |
 |---|---|---|
-| `README.md`（本文件） | W1 路线图 + 索引 | 今天读一遍，每天照着走 |
-| `docs/01-python-for-java.md` | Python 速成（Java 开发者映射） | D2 通读 + 动手 |
-| `docs/02-llm-api-basics.md` | LLM API 完全教程（role/参数/token/计费/错误） | D1 读 §1–5，D2 读完 |
-| `docs/03-streaming.md` | 流式输出 / SSE | D3 |
-| `docs/04-function-calling.md` | 工具调用完全教程 ⭐ 本周核心 | D4 |
-| `docs/05-exercises.md` | 每日练习 + 验收标准 | 每天对照 |
-| `docs/06-quiz.md` | 周日测验（闭卷） | D6 |
-| `docs/07-references.md` | 延伸链接（仅查证用） | 需要时 |
-| `hello_llm.py` | 完整示例：第一次 API 调用 | D1 |
-| `stream_chat.py` | TODO 骨架：流式聊天（自己填） | D3 |
-| `tool_chat.py` | TODO 骨架：工具循环（自己填） | D4 |
-| `solutions/` | 参考答案 + 测验答案 | **先自己写**，卡 30 分钟以上才看 |
+| [README.md](./README.md)（本文件） | W1 路线图 + 索引 | 今天读一遍，每天照着走 |
+| [docs/01-python-for-java.md](./docs/01-python-for-java.md) | Python 速成（Java 开发者映射） | D2 通读 + 动手 |
+| [docs/02-llm-api-basics.md](./docs/02-llm-api-basics.md) | LLM API 完全教程（role/参数/token/计费/错误） | D1 读 §1–5，D2 读完 |
+| [docs/03-streaming.md](./docs/03-streaming.md) | 流式输出 / SSE | D3 |
+| [docs/04-function-calling.md](./docs/04-function-calling.md) | 工具调用完全教程 ⭐ 本周核心 | D4 |
+| [docs/05-exercises.md](./docs/05-exercises.md) | 每日练习 + 验收标准 | 每天对照 |
+| [docs/06-quiz.md](./docs/06-quiz.md) | 周日测验（闭卷） | D6 |
+| [docs/07-references.md](./docs/07-references.md) | 延伸链接（仅查证用） | 需要时 |
+| [hello_llm.py](./hello_llm.py) | 完整示例：第一次 API 调用 | D1 |
+| [stream_chat.py](./stream_chat.py) | TODO 骨架：流式聊天（自己填） | D3 |
+| [tool_chat.py](./tool_chat.py) | TODO 骨架：工具循环（自己填） | D4 |
+| [solutions/](./solutions/README.md) | 参考答案 + 测验答案 | **先自己写**，卡 30 分钟以上才看 |
 
 ## ✅ 环境状态
 

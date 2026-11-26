@@ -1,0 +1,12 @@
+/* 正文里有不少宽表格，默认 688px 偏窄，略加宽 */
+.VPDoc.has-aside .content-container {
+  max-width: 776px;
+}
+
+/* ROADMAP 每周标题前的空锚点 <a class="anchor-week" id="w1"></a>：
+   定位后让标题落在导航栏下方而不是被遮住 */
+.VPDoc .anchor-week {
+  display: block;
+  height: 0;
+  scroll-margin-top: 88px;
+}

@@ -6,6 +6,11 @@ __pycache__/
 # Environment secrets
 .env
 
+# Docs site (VitePress)
+node_modules/
+.vitepress/dist/
+.vitepress/cache/
+
 # Editor / OS
 .DS_Store
 .idea/

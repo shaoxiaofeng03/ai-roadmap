@@ -1,0 +1,104 @@
+.week-hub {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 48px 32px 96px;
+}
+
+.week-hub .title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+}
+
+.week-hub .desc {
+  margin: 0 0 20px;
+  color: var(--vp-c-text-2);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.week-hub .table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+}
+
+.week-hub table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.week-hub thead th {
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg-soft);
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.week-hub tbody td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-1);
+}
+
+.week-hub tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 当前周高亮：当前周读自 PROGRESS.md，随每周复盘自动切换 */
+.week-hub tbody tr.current {
+  background: var(--vp-c-brand-soft);
+}
+
+.week-hub tbody tr.current .num {
+  color: var(--vp-c-brand-1);
+  font-weight: 700;
+}
+
+.week-hub .num {
+  display: inline-block;
+  min-width: 2.4em;
+  font-weight: 600;
+}
+
+.week-hub .badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+}
+
+.week-hub .dates {
+  display: block;
+  font-size: 12px;
+  color: var(--vp-c-text-3);
+}
+
+.week-hub :deep(a) {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.week-hub :deep(a:hover) {
+  text-decoration: underline;
+}
+
+.week-hub .none {
+  color: var(--vp-c-text-3);
+}
+
+@media (max-width: 640px) {
+  .week-hub {
+    padding: 32px 0 64px;
+  }
+}

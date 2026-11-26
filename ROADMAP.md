@@ -122,94 +122,130 @@
 
 ### 阶段一：LLM 基础 + RAG（W1–W5）
 
-**W1（11/24–11/30）环境 + LLM API 入门**
+<a class="anchor-week" id="w1"></a>
+
+#### W1（11/24–11/30）环境 + LLM API 入门
 - 任务：Python 速成（Java 开发者映射法：uv≈Maven、dict/list≈Map/List、装饰器≈注解+AOP、async/await≈CompletableFuture、pydantic≈Bean Validation）；申请 DeepSeek 或阿里百炼 Qwen API（OpenAI 兼容协议）；openai SDK：messages 结构（system/user/assistant）、流式输出、temperature/max_tokens；function calling 初体验（get_weather 工具，走通 tool_calls → tool 消息 → 最终回答）
 - 交付物：CLI 流式聊天机器人 + 一个工具调用
 - 检查点：能画出 function calling 完整消息流转图；能解释四种 role 的作用
 
-**W2（12/1–12/7）Prompt 工程 + LLM 应用工程化**
+<a class="anchor-week" id="w2"></a>
+
+#### W2（12/1–12/7）Prompt 工程 + LLM 应用工程化
 - 任务：Prompt 结构（角色/任务/上下文/few-shot/CoT/输出格式）；结构化输出（JSON mode + pydantic 校验 + 失败兜底）；工程化：重试退避、限流、超时、token 成本统计、日志；prompt 注入攻击与防御意识
 - 交付物：结构化信息抽取小工具（输入简历/JD → 输出规范 JSON），带重试与成本统计
 - 检查点：few-shot / CoT 何时有效；JSON 解析失败的三层兜底策略
 
-**W3（12/8–12/14）Embedding + 向量检索 + RAG 原理**
+<a class="anchor-week" id="w3"></a>
+
+#### W3（12/8–12/14）Embedding + 向量检索 + RAG 原理
 - 任务：embedding 与余弦相似度直觉；向量库选型认知（Chroma 入门 / pgvector 生产 / Milvus 大规模 / ES 混合检索）；RAG 全链路手写一遍：加载→分块→嵌入→入库→检索→拼接→生成
 - 交付物：最小 RAG 脚本（对一批 Markdown/PDF 问答）+ 10 条手写测试 QA
 - 检查点：RAG vs 长上下文 vs 微调的决策框架；chunk size 过大/过小各有什么问题
 
-**W4（12/15–12/21）RAG 工程化（P1 主体）**
+<a class="anchor-week" id="w4"></a>
+
+#### W4（12/15–12/21）RAG 工程化（P1 主体）
 - 任务：分块策略对比（固定/语义/标题感知）+ metadata 过滤；混合检索（BM25 + 向量，RRF 融合）；bge-reranker 重排；FastAPI 服务化 + SSE 流式（Java 经验直接迁移）+ 简单前端；引用溯源
 - 交付物：P1 v1（摄入/检索/问答/引用/流式全通）
 - 检查点：召回与重排的分工；为什么混合检索比纯向量稳
 
-**W5（12/22–12/28）RAG 评估与优化（P1 完成）**
+<a class="anchor-week" id="w5"></a>
+
+#### W5（12/22–12/28）RAG 评估与优化（P1 完成）
 - 任务：构建 50–100 条评估集；RAGAS 四指标跑通；查询改写 / multi-query / HyDE；lost in the middle 现象与对策；消融实验（分块 × 检索 × rerank）→ 评估报告；GitHub 仓库整理
 - 交付物：**P1 完成** + 评估报告（第一个面试弹药）
 - 检查点：每个 RAGAS 指标的定义与计算方式；能讲一个"评估发现问题→定位→优化→指标提升"的完整故事（带数字）
 
 ### 阶段二：Agent 核心（W6–W9）
 
-**W6（12/29–1/4）Agent 原理：手写 ReAct**
+<a class="anchor-week" id="w6"></a>
+
+#### W6（12/29–1/4）Agent 原理：手写 ReAct
 - 任务：Agent vs Workflow 的本质区别；ReAct 循环（Thought→Action→Observation）；**不用框架**手写 while 循环 + function calling 工具 agent（搜索/计算器/SQL 只读查询）；工具设计规范；循环防护（max steps / 超时 / token 预算）
 - 交付物：手写 ReAct agent（无框架，核心代码 < 300 行）
 - 检查点：agent 的本质 = "LLM 调用循环 + 工具 + 终止条件"；工具描述写法如何影响调用成功率
 
-**W7（1/5–1/11）LangGraph**
+<a class="anchor-week" id="w7"></a>
+
+#### W7（1/5–1/11）LangGraph
 - 任务：StateGraph / node / edge / conditional edge；checkpoint 持久化；interrupt 与 human-in-the-loop；把 W6 agent 重构为 LangGraph 版；subgraph 概念
 - 交付物：LangGraph 版 agent（带 checkpoint + 人工审批节点）
 - 检查点：LangGraph 与 LangChain Chain 的区别；什么场景必须用状态机而不是链
 
-**W8（1/12–1/18）MCP + 记忆 + 多智能体模式**
+<a class="anchor-week" id="w8"></a>
+
+#### W8（1/12–1/18）MCP + 记忆 + 多智能体模式
 - 任务：MCP 协议（host/client/server，tools/resources/prompts，JSON-RPC）；**用 Java Spring AI MCP 写 MCP Server** 暴露业务工具；Python agent 经 MCP client 接入；记忆设计（对话摘要压缩 + 向量长期记忆）；多智能体模式（supervisor / handoff）与"什么时候不要用多 agent"
 - 交付物：P2 主体（Java MCP Server + Python LangGraph agent 联通）
 - 检查点：MCP 与 function calling 的区别与协议层价值；记忆压缩丢信息的风险
 
-**W9（1/19–1/25）Agent 评估与可观测（P2 完成）**
+<a class="anchor-week" id="w9"></a>
+
+#### W9（1/19–1/25）Agent 评估与可观测（P2 完成）
 - 任务：LangFuse 自托管 + tracing（span/token/成本/延迟）；Agent 评估：20–30 个任务集，任务成功率 / 轨迹质量 / 工具调用正确率；guardrails（输入过滤/输出校验/敏感操作确认）
 - 交付物：**P2 完成** + trace 截图 + 评估报告
 - 检查点：如何定位"agent 在哪一步出错"；agent 评估与 RAG 评估的方法论差异
 
 ### 阶段三：毕业项目（W10–W13）
 
-**W10（1/26–2/1）毕业项目设计**
+<a class="anchor-week" id="w10"></a>
+
+#### W10（1/26–2/1）毕业项目设计
 - 任务：场景三选一定稿；写设计文档：架构图 / 数据流 / 工具清单 / 评估方案 / 失败模式分析；Claude review 设计文档（第一次系统设计演练）；仓库骨架 + Docker Compose 雏形
 - 交付物：设计文档 v1 + 仓库骨架
 - 检查点：10 分钟讲清"为什么这个架构、trade-off 是什么、哪里会挂"
 
-**W11（2/2–2/8，春节周・弹性）核心开发 ①**
+<a class="anchor-week" id="w11"></a>
+
+#### W11（2/2–2/8，春节周・弹性）核心开发 ①
 - 任务：Agent 主流程 + RAG 集成 + 核心工具端到端跑通。春节（2/6）前后弹性安排：假期集中开发或休息，进度允许 ±1 周浮动，**不补课不焦虑，顺延即可**
 - 交付物：主流程端到端 demo
 
-**W12（2/9–2/15）核心开发 ②**
+<a class="anchor-week" id="w12"></a>
+
+#### W12（2/9–2/15）核心开发 ②
 - 任务：多轮会话 / 记忆 / 人工接管 / 业务闭环；前端 demo 页面完善
 - 交付物：完整场景可演示
 
-**W13（2/16–2/22）工程化收尾（P3 完成）**
+<a class="anchor-week" id="w13"></a>
+
+#### W13（2/16–2/22）工程化收尾（P3 完成）
 - 任务：Docker Compose 一键部署；LangFuse 全链路；评估流水线 + 成本/延迟统计；guardrails；README（架构图+快速开始+评估数据）；demo 视频；一篇技术博客
 - 交付物：**P3 完成**——简历第一项目
 - 检查点：Claude 扮演面试官做 30 分钟项目深挖，能扛住
 
 ### 阶段四：求职冲刺（W14–W16）
 
-**W14（2/23–3/1）简历 + 包装**
+<a class="anchor-week" id="w14"></a>
+
+#### W14（2/23–3/1）简历 + 包装
 - 任务：一页简历（Java 经验重写为"支撑 AI 系统的工程能力"：高并发→LLM 网关、分布式→Agent 服务、数据库→向量检索）；三项目量化表述（评估提升 X% / P95 延迟 / 单次成本）；GitHub profile 整理；Claude 逐行改简历；定 30 家目标公司清单；开始刷题保手感（LeetCode Hot 100 medium，Java，3–5 题/周）
 - 交付物：简历 v1 + 目标公司清单
 
-**W15（3/2–3/8）面试冲刺 ① + 开始投递（金三）**
+<a class="anchor-week" id="w15"></a>
+
+#### W15（3/2–3/8）面试冲刺 ① + 开始投递（金三）
 - 任务：八股题库三大模块（LLM 基础 / RAG / Agent）——Claude 出题、你作答、Claude 批改；系统设计两题：企业知识库问答系统、LLM 网关（Java 优势题）；**投递启动：10–15 家/周**（Boss直聘 / 内推 / 猎聘 / LinkedIn）
 - 交付物：首批投递发出 + 错题本
 
-**W16（3/9–3/15）面试冲刺 ② + 模拟面试**
+<a class="anchor-week" id="w16"></a>
+
+#### W16（3/9–3/15）面试冲刺 ② + 模拟面试
 - 任务：系统设计两题：Agent 平台、Deep Research；项目深挖话术（STAR + trade-off 故事）；**2 次全真模拟面试**（技术 + 项目 + 行为面，Claude 扮演面试官并复盘）；Java 八股复习（JVM / 并发 / Spring / MySQL / Redis——AI 应用岗仍会考）
 - 交付物：模拟面试复盘记录 + 改进清单
 
 ### 阶段五：面试收割（W17–W20）
 
-**W17–W18（3/16–3/29）面试循环**
+<a class="anchor-week" id="w17"></a>
+
+#### W17–W18（3/16–3/29）面试循环
 - 任务：真实面试 → 记录每场被问的题 → Claude 帮分析缺口 → 针对性补漏；持续投递保持 pipeline（每周 8–10 家）；每周复盘调整
 - 交付物：面试记录表（PROGRESS.md）+ 缺口清零
 
-**W19–W20（3/30–4/12）Offer 冲刺**
+<a class="anchor-week" id="w19"></a>
+
+#### W19–W20（3/30–4/12）Offer 冲刺
 - 任务：银四补投；offer 对比维度（方向含金量 / 团队 / 成长 / 薪资 / 稳定性）；谈薪策略；缓冲至 4 月底；入职准备（提前熟悉目标团队技术栈）
 - 交付物：**offer** 🎯
 
@@ -253,7 +289,7 @@
 
 ## 8. 资源清单（精选，不贪多）
 
-> 视频/课程资源按周次映射见同目录 **`RESOURCES-VIDEOS.md`**（B 站 + 英文官方源，每阶段一个主力，≤3h/周）。
+> 视频/课程资源按周次映射见同目录 **[RESOURCES-VIDEOS.md](./RESOURCES-VIDEOS.md)**（B 站 + 英文官方源，每阶段一个主力，≤3h/周）。
 
 **必读 / 必做**
 - Anthropic《Building Effective Agents》：anthropic.com/engineering/building-effective-agents（Agent 设计圣经，W6 前读完）
@@ -329,7 +365,7 @@
 
 ## 11. 进度追踪
 
-见同目录 **`PROGRESS.md`**（周状态表 / 里程碑 / 面试记录 / 复盘日志）。
+见同目录 **[PROGRESS.md](./PROGRESS.md)**（周状态表 / 里程碑 / 面试记录 / 复盘日志）。
 每周复盘时由 Claude 更新；里程碑达成时在表中打 ✅。
 
 **第一个行动（今天就能做）**：W1 第一步——装 Python 环境（uv）+ 申请一个 DeepSeek 或阿里百炼 API key。对 Claude 说「开始第 1 周」即可拿到完整拆解。
