@@ -6,6 +6,15 @@
 
 **当前周：W1（11/24–11/30）🔄 11/24 启动**
 
+## 每日打卡
+
+> 热力图按天显示任务完成度；点格子查看当天任务，勾选后写一句笔记，再点「打卡并提交」。
+> 打卡直接写入仓库根目录的 `checkins.json`（本地 `pnpm dev` 下可写），提交时自动 `git commit` + `git push`，GitHub Pages 随推送更新；线上页面只读展示已提交记录，不需要 GitHub token。
+
+<ClientOnly>
+  <DailyTracker />
+</ClientOnly>
+
 ## 周进度表
 
 | 周 | 日期 | 主题 | 状态 | 交付物 / 备注 |

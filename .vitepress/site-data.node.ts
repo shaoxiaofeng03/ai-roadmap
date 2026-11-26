@@ -7,11 +7,17 @@ import path from 'node:path'
 import type { DefaultTheme } from 'vitepress'
 import {
   TOTAL_WEEKS,
+  formatDateUTC,
+  inferYear,
   parseCurrentWeek,
   parseHeadings,
+  parseStartDate,
   parseWeekTitle,
   slugify,
   stripParens,
+  weekdayCN,
+  type DailyTask,
+  type DayPlan,
   type SiteData,
   type Week
 } from './site-data'
@@ -53,9 +59,82 @@ export function findAnchor(root: string, file: string, keyword: string): string 
   return h ? `${page}#${h.anchor ?? slugify(h.text)}` : page
 }
 
+/** 学习包 README 里的「周计划」表：| 二 D1 | 教材 | 任务 | 完成标志 | */
+function parseDailyRows(md: string): Array<{ label: string; textbook: string; task: string; acceptance: string }> {
+  const out: Array<{ label: string; textbook: string; task: string; acceptance: string }> = []
+  for (const line of md.split(/\r?\n/)) {
+    const m = /^\|\s*(?:[一二三四五六日天]\s*)?(D\d+)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|/.exec(line)
+    if (!m) continue
+    out.push({ label: m[1], textbook: m[2], task: m[3], acceptance: m[4] })
+  }
+  return out
+}
+
+/** docs/05-exercises.md：## D2 … 小节里的 **Ex2.1 …** 练习 */
+function parseExercises(md: string): Map<string, Array<{ label: string; text: string }>> {
+  const out = new Map<string, Array<{ label: string; text: string }>>()
+  let current = ''
+  for (const line of md.split(/\r?\n/)) {
+    const h = /^##\s*(D\d+)/.exec(line)
+    if (h) {
+      current = h[1]
+      continue
+    }
+    if (!current) continue
+    const e = /^\*\*(Ex[0-9.]+)\s*(.*?)\*\*/.exec(line)
+    if (!e) continue
+    const rest = e[2].trim()
+    const arr = out.get(current) ?? []
+    arr.push({ label: e[1], text: rest ? `${e[1]} ${rest}` : e[1] })
+    out.set(current, arr)
+  }
+  return out
+}
+
+/** 把各周学习包的每日计划展开成日期 → 任务，供打卡组件使用 */
+function buildDays(root: string, weeks: Week[], start: { year: number; month: number; day: number } | null): DayPlan[] {
+  const days: DayPlan[] = []
+  for (const w of weeks) {
+    if (!w.pkg) continue
+    const dir = w.pkg.replace(/^\/projects\//, '').replace(/\/$/, '')
+    const rows = parseDailyRows(read(root, `projects/${dir}/README.md`))
+    if (!rows.length) continue
+    const dm = /(\d{1,2})\/(\d{1,2})/.exec(w.dates)
+    if (!dm) continue
+    const month = Number(dm[1])
+    const day = Number(dm[2])
+    const base = Date.UTC(inferYear(month, start), month - 1, day)
+    const exercises = parseExercises(read(root, `projects/${dir}/docs/05-exercises.md`))
+
+    for (const row of rows) {
+      const offset = Math.max(0, Number(row.label.slice(1)) - 1)
+      const date = formatDateUTC(base + offset * 86_400_000)
+      const tasks: DailyTask[] = [
+        { id: `w${w.n}-${row.label}-main`, text: row.task, kind: 'main', acceptance: row.acceptance }
+      ]
+      for (const e of exercises.get(row.label) ?? []) {
+        tasks.push({ id: `w${w.n}-${row.label}-${e.label}`, text: e.text, kind: 'exercise' })
+      }
+      days.push({
+        week: w.n,
+        label: row.label,
+        date,
+        weekday: weekdayCN(date),
+        textbook: row.textbook,
+        task: row.task,
+        acceptance: row.acceptance,
+        tasks
+      })
+    }
+  }
+  return days.sort((a, b) => a.date.localeCompare(b.date))
+}
+
 export function loadSiteData(root: string): SiteData {
   const weeks: Week[] = Array.from({ length: TOTAL_WEEKS }, (_, i) => ({ n: i + 1, title: '', dates: '' }))
   const at = (n: number) => weeks[n - 1]
+  const progress = read(root, PROGRESS_FILE)
+  const start = parseStartDate(progress)
 
   // 1) 周计划：ROADMAP.md
   for (const h of parseHeadings(read(root, ROADMAP_FILE))) {
@@ -68,6 +147,17 @@ export function loadSiteData(root: string): SiteData {
       it.dates = it.dates || w.dates
       it.plan = `/${ROADMAP_FILE.replace('.md', '')}#${h.anchor ?? slugify(h.text)}`
     }
+  }
+
+  // 1.1) 周起止日期：给热力图提供完整时间轴（即使该周还没有学习包）
+  for (const w of weeks) {
+    const m = /(\d{1,2})\/(\d{1,2})\s*[–-]\s*(\d{1,2})\/(\d{1,2})/.exec(w.dates)
+    if (!m) continue
+    const [m1, d1, m2, d2] = [Number(m[1]), Number(m[2]), Number(m[3]), Number(m[4])]
+    const y1 = inferYear(m1, start)
+    const y2 = m2 < m1 ? y1 + 1 : y1
+    w.startDate = formatDateUTC(Date.UTC(y1, m1 - 1, d1))
+    w.endDate = formatDateUTC(Date.UTC(y2, m2 - 1, d2))
   }
 
   // 2) 视频资源：RESOURCES-VIDEOS.md
@@ -90,7 +180,11 @@ export function loadSiteData(root: string): SiteData {
     }
   }
 
-  return { currentWeek: parseCurrentWeek(read(root, PROGRESS_FILE)), weeks }
+  return {
+    currentWeek: parseCurrentWeek(progress),
+    weeks,
+    days: buildDays(root, weeks, start)
+  }
 }
 
 /** 列出某目录下（含子目录）的 Markdown，排除目录自身的 README.md */

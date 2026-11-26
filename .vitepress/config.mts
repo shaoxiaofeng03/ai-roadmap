@@ -1,5 +1,8 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, type MarkdownRenderer } from 'vitepress'
+import { checkinsPlugin } from './checkins-plugin'
 import { buildSidebar, findAnchor, loadSiteData, ROADMAP_FILE } from './site-data.node'
 import type { SiteData } from './site-data'
 
@@ -79,6 +82,12 @@ export default defineConfig({
   lastUpdated: true,
   sitemap: { hostname: 'https://shaoxiaofeng03.github.io/ai-roadmap/' },
 
+  // 打卡记录源文件在仓库根目录；构建时复制到 dist，线上以静态 JSON 读取
+  buildEnd(siteConfig) {
+    const src = path.join(root, 'checkins.json')
+    if (fs.existsSync(src)) fs.copyFileSync(src, path.join(siteConfig.outDir, 'checkins.json'))
+  },
+
   markdown: {
     config: rewriteLinks
   },
@@ -111,6 +120,8 @@ export default defineConfig({
 
   vite: {
     plugins: [
+      // 本地开发时读写仓库根目录的 checkins.json，并支持 git push
+      checkinsPlugin(root),
       {
         name: 'site-data',
         resolveId: (id) => (id === VIRTUAL_ID ? `\0${VIRTUAL_ID}` : undefined),

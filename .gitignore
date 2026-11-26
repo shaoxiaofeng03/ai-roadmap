@@ -11,6 +11,9 @@ node_modules/
 .vitepress/dist/
 .vitepress/cache/
 
+# 打卡文件写入时的临时文件
+checkins.json.tmp
+
 # Editor / OS
 .DS_Store
 .idea/
