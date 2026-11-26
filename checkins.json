@@ -8,6 +8,12 @@
       "note": "model,message ,user, system content,max token,temperature",
       "updatedAt": "2026-11-26T07:44:09.188Z",
       "submittedAt": "2026-11-26T07:44:09.188Z"
+    },
+    "2026-11-23": {
+      "done": [],
+      "note": "输入输出都算token",
+      "updatedAt": "2026-11-26T07:44:46.335Z",
+      "submittedAt": "2026-11-26T07:44:46.335Z"
     }
   }
 }
