@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "days": {
+    "2026-11-24": {
+      "done": [
+        "w1-D1-main"
+      ],
+      "note": "model,message ,user, system content,max token,temperature",
+      "updatedAt": "2026-11-26T07:44:09.188Z",
+      "submittedAt": "2026-11-26T07:44:09.188Z"
+    }
+  }
+}
